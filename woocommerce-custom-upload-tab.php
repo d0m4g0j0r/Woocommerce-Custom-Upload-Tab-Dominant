@@ -38,11 +38,19 @@ function dominant_core_product_panel(){
 
         <div class="options options_group">
 
-        <?php foreach($documents[0] as $document) { ?>
+        <?php foreach($documents[0] as $document) {
+
+            if(get_the_title($document['id']) != '') {
+                $title = get_the_title($document['id']);
+            } else {
+                $title = $document['filename'];
+            }
+
+            ?>
 
             <p class="form-field">
                 <label>
-                    <a href="<?php echo $document['url'] ?>" target="_blank"><?php echo $document['filename'] ?></a>
+                    <a href="<?php echo $document['url'] ?>" target="_blank"><?php echo $title ?></a>
                 </label>
             </p>
 
@@ -118,15 +126,23 @@ function display_document_list_in_additional_info_table( $product_attributes, $p
     if($documents) {
         $list = '';
         foreach($documents[0] as $document) {
-            $list .= '<li><a href="' . $document['url'] . '" target="_blank">' . $document['filename'] . '</a></li>';
+            if(get_the_title($document['id']) != '') {
+                $title = get_the_title($document['id']);
+            } else {
+                $title = $document['filename'];
+            }
+
+            $list .= '<li><a href="' . $document['url'] . '" target="_blank">' . $title . '</a></li>';
+
         }
+
+
 
         $product_attributes[ 'attribute_' . 'documents' ] = array(
             'label' => __('Documents', 'custom-upload-tag'),
             'value' => '<ul>' . $list . '</ul>',
         );
-
-        return $product_attributes;
     }
+    return $product_attributes;
 
 }
